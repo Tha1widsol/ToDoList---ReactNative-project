@@ -1,16 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button} from 'react-native';
+import Header from './components/header'
 
 export default function App() {
   const handlePress = () => console.log("Text pressed");
   return (
-    <SafeAreaView style={styles.container}>
+   <SafeAreaView style={styles.container}>
+
+      <Header title="Chat room"></Header>
+     <h1>Chat Room</h1>
+     <View style = {styles.intro}> 
       <Text>Open up App.js to start working on your app!</Text>
+      <br></br>
       <Text numberOfLines={1}>This is my first react project. I hope you guys enjoy this app</Text>
-      <SafeAreaView style={{top:20,}}>
-      <Button color ="red" title="new button"  onPress = {() => alert("Tapped")}></Button>
+
+      <SafeAreaView style={{top:10,}}>
+      <Button color ="red" title="new button"  onPress = {() =>this.props.navigation.navigate('Home')}></Button>
       </SafeAreaView>
+      
+     </View>
+
       <StatusBar style="auto" />
   
       <TouchableOpacity onPress = {()=>console.log("Tapped") }>
@@ -23,6 +33,8 @@ export default function App() {
       </TouchableOpacity>
      
     </SafeAreaView>
+
+    
   );
 }
 
@@ -32,6 +44,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom:"20",
+   
+   
   },
+
+  intro: {
+    backgroundColor:"lightblue",
+    padding:"20px",
+    alignSelf: 'stretch',
+  }
+
 });
+

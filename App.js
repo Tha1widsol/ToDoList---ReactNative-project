@@ -2,40 +2,45 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button} from 'react-native';
 import Header from './components/header'
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+
 
 export default function App() {
   const handlePress = () => console.log("Text pressed");
+  const Tab = createBottomTabNavigator();
+
+  function HomeScreen() {
+    return (
+      <View style={styles.container}>
+        <Text>Home!</Text>
+      </View>
+    );
+  }
+  function SettingsScreen() {
+    return (
+      <View style={styles.container}>
+        <Text>csdcfs</Text>
+      </View>
+    );
+  }
   return (
-   <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header title="ToDoList"></Header>
+        <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={HomeScreen}/>
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
 
-      <Header title="Chat room"></Header>
-     <h1>Chat Room</h1>
-     <View style = {styles.intro}> 
-      <Text>Open up App.js to start working on your app!</Text>
-      <br></br>
-      <Text numberOfLines={1}>This is my first react project. I hope you guys enjoy this app</Text>
-
-      <SafeAreaView style={{top:10,}}>
-      <Button color ="red" title="new button"  onPress = {() =>this.props.navigation.navigate('Home')}></Button>
-      </SafeAreaView>
-      
-     </View>
-
-      <StatusBar style="auto" />
-  
-      <TouchableOpacity onPress = {()=>console.log("Tapped") }>
-      <Image
-      source={{
-        width:200,
-        height:300,
-        uri:"https://picsum.photos/200/300"}}
-        style={{top: 30,}}></Image>
-      </TouchableOpacity>
-     
     </SafeAreaView>
 
     
   );
+  
+
 }
 
 const styles = StyleSheet.create({
@@ -52,6 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor:"lightblue",
     padding:"20px",
     alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nav:{
+    display:"flex",
   }
 
 });

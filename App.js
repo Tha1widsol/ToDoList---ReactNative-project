@@ -1,40 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button} from 'react-native';
-import Header from './components/header'
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-
+import React,{useState} from 'react';
+import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button,FlatList} from 'react-native';
+import Header from './components/header';
+import ToDoitem from './components/todoitem';
 
 export default function App() {
   const handlePress = () => console.log("Text pressed");
-  const Tab = createBottomTabNavigator();
+  const [todos,setTodos] = useState([
+    {text:"Get up",key:'1' },
+    {text:"Drink tea",key:'2' },
+    {text:"Go to work",key:'3' },
+    {text:"Get laid",key:'4' },
+  ]);
 
-  function HomeScreen() {
-    return (
-      <View style={styles.container}>
-        <Text>Home!</Text>
-      </View>
-    );
+  const pressHandler = (key) =>{
+    setTodos((prevTodos) =>{
+      return prevTodos.filter(todo => todo.key != key);
+    });
   }
-  function SettingsScreen() {
-    return (
-      <View style={styles.container}>
-        <Text>csdcfs</Text>
-      </View>
-    );
-  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="ToDoList"></Header>
-        <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}/>
-          <Tab.Screen name="Settings" component={SettingsScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <View style={styles.content}>
+        <View style = {styles.list}>
+          <FlatList
+           data = {todos}
+           renderItem = {({item}) => (
+            <ToDoitem item = {item} pressHandler={pressHandler}/>
+          )}
 
+            />
+        </View>
+      </View>
     </SafeAreaView>
 
     
@@ -47,21 +45,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+   
    
    
   },
 
-  intro: {
-    backgroundColor:"lightblue",
-    padding:"20px",
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'center',
+  content:{
+    padding:40,
   },
-  nav:{
-    display:"flex",
+  list:{
+    marginTop:20,
   }
 
 });

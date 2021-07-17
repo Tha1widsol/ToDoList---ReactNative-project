@@ -3,6 +3,7 @@ import React,{useState} from 'react';
 import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button,FlatList} from 'react-native';
 import Header from './components/header';
 import ToDoitem from './components/todoitem';
+import AddTodo from './components/addTodo';
 
 export default function App() {
   const handlePress = () => console.log("Text pressed");
@@ -19,10 +20,20 @@ export default function App() {
     });
   }
 
+  const submitHandler = (text) => {
+    setTodos((prevTodos)=>{
+      return [
+        {text:text,key : Math.random().toString()},
+        ...prevTodos
+      ]
+    })
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="ToDoList"></Header>
       <View style={styles.content}>
+        <AddTodo submitHandler = {submitHandler}/>
         <View style = {styles.list}>
           <FlatList
            data = {todos}

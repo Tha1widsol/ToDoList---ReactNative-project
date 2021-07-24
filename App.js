@@ -4,15 +4,19 @@ import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button,FlatL
 import Header from './components/header';
 import ToDoitem from './components/todoitem';
 import AddTodo from './components/addTodo';
+import { useEffect } from 'react';
 
 export default function App() {
-  const handlePress = () => console.log("Text pressed");
-  const [todos,setTodos] = useState([
-    {text:"Get up",key:'1' },
-    {text:"Drink tea",key:'2' },
-    {text:"Go to work",key:'3' },
-    {text:"Get laid",key:'4' },
-  ]);
+  const [todos,setTodos] = useState([])
+  useEffect(() => {
+    fetch('/api').then(response => {
+      if(response.ok){
+        return response.json()
+      }
+
+    }).then(data => console.log(data))
+  
+  },[])
 
   const pressHandler = (key) =>{
     setTodos((prevTodos) =>{

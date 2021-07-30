@@ -7,17 +7,20 @@ import AddTodo from './components/addTodo';
 import { useEffect } from 'react';
 
 export default function App() {
-  const [todos,setTodos] = useState([])
-  useEffect(() => {
-    fetch('/api').then(response => {
-      if(response.ok){
-        return response.json()
-      }
+  const [todos,setTodos] = useState("")
 
-    }).then(data => console.log(data))
-  
-  },[])
 
+  const insertData = () => {
+    fetch('http://localhost:19006/add'),{
+      method:'POST',
+      headers:{
+        'content-Type':'application/json'
+    },
+    body:JSON.stringify({todos:todos})
+    }
+    .then(resp => resp.json())
+ 
+  }
   const pressHandler = (key) =>{
     setTodos((prevTodos) =>{
       return prevTodos.filter(todo => todo.key != key);

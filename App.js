@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useRef} from 'react'
 import { Button, SafeAreaView, StyleSheet, TextInput } from 'react-native'
 import ToDoLists from './components/ToDoLists'
 import uuidv4 from 'uuid/v4'
@@ -7,25 +7,33 @@ import Header from './components/Header'
 
 export default function App() {
 
-  const [textVal,setText] = useState()
   const [todos,setTodos] = useState([])
 
+  const todoRef = useRef()
+
   function HandleSetTodos(){
-    if (todos.filter(todo => todo.name === textVal).length > 0 || textVal == null || textVal.length == 0){
+    const newTodos = [...todos]
+
+    
+    const name = todoRef.current.value
+    
+    if (newTodos.filter(todo => todo.name === name ).length > 0 || name  == null || name.length == 0){
       return 
     }
 
     setTodos(prevState => {
-      return [...prevState, {id: uuidv4(),name: textVal, complete: false}]
+      return [...prevState, {id: uuidv4(),name: name , complete: false}]
     })
+
+    todoRef.current.value = null
+   
   }
 
   function HandleRemoveTodo(id){
-    console.log(id)
-    const new_todos = [...todos]
-    let index = new_todos.findIndex(todo => todo.id === id)
-    new_todos.splice(index,1)
-    setTodos(new_todos)
+    const newTodos = [...todos]
+    let index = newTodos.findIndex(todo => todo.id === id)
+    newTodos.splice(index,1)
+    setTodos(newTodos)
 
   }
 
@@ -34,8 +42,8 @@ export default function App() {
   return (
     <SafeAreaView>
       <Header title="ToDoApp"/>
-      <TextInput onChangeText={text => setText(text)}
-      value = {textVal}
+      <TextInput
+      ref = {todoRef}
       placeholder = "Insert"
       style = {styles.input}
 
@@ -43,7 +51,6 @@ export default function App() {
       <Button title="Add ToDoList" onPress={HandleSetTodos}/>
 
       <ToDoLists todos = {todos} HandleRemoveTodo = {HandleRemoveTodo}/>
-
 
       </SafeAreaView>
   )

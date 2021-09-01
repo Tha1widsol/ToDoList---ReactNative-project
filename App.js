@@ -1,92 +1,64 @@
-import { StatusBar } from 'expo-status-bar';
-import React,{useState} from 'react';
-import { StyleSheet, Text, View,SafeAreaView,Image,TouchableOpacity,Button,FlatList,Alert,TouchableWithoutFeedback,Keyboard} from 'react-native';
-import Header from './components/header';
-import ToDoitem from './components/todoitem';
-import AddTodo from './components/addTodo';
-import { useEffect } from 'react';
+import React,{useState} from 'react'
+import { Button, SafeAreaView, StyleSheet, TextInput } from 'react-native'
+import ToDoLists from './components/ToDoLists'
+import uuidv4 from 'uuid/v4'
+import Header from './components/Header'
+
 
 export default function App() {
-  const [todos,setTodos] = useState("")
 
+  const [textVal,setText] = useState()
+  const [todos,setTodos] = useState([])
 
-  const insertData = () => {
-    fetch('http://localhost:19006/add'),{
-      method:'POST',
-      headers:{
-        'content-Type':'application/json'
-    },
-    body:JSON.stringify({todos:todos})
+  function HandleSetTodos(){
+    if (todos.filter(todo => todo.name === textVal).length > 0 || textVal == null || textVal.length == 0){
+      return 
     }
-    .then(resp => resp.json())
- 
-  }
-  const pressHandler = (key) =>{
-    setTodos((prevTodos) =>{
-      return prevTodos.filter(todo => todo.key != key);
-    });
+
+    setTodos(prevState => {
+      return [...prevState, {id: uuidv4(),name: textVal, complete: false}]
+    })
   }
 
-  const submitHandler = (text) => {
-    if(text.length > 5){
-      setTodos((prevTodos)=>{
-        return [
-          {text:text,key : Math.random().toString()},
-          ...prevTodos
-        ]
-      })
-    }
-    else{
-      Alert.alert("Invalid","ToDos must have a length of atleast 6",[
-        {text:"understood",onPress:() => console.log('alert closed')}
-      ]);
-    }
-   
+  function HandleRemoveTodo(id){
+    console.log(id)
+    const new_todos = [...todos]
+    let index = new_todos.findIndex(todo => todo.id === id)
+    new_todos.splice(index,1)
+    setTodos(new_todos)
+
   }
+
+
 
   return (
-    <TouchableWithoutFeedback onPress = {() => {
-      Keyboard.dismiss();
-    
-    }}>
-    <SafeAreaView style={styles.container}>
-      <Header title="ToDoList"></Header>
-      <View style={styles.content}>
-        <AddTodo submitHandler = {submitHandler}/>
-        <View style = {styles.list}>
-          <FlatList
-           data = {todos}
-           renderItem = {({item}) => (
-            <ToDoitem item = {item} pressHandler={pressHandler}/>
-          )}
+    <SafeAreaView>
+      <Header title="ToDoApp"/>
+      <TextInput onChangeText={text => setText(text)}
+      value = {textVal}
+      placeholder = "Insert"
+      style = {styles.input}
 
-            />
-        </View>
-      </View>
-    </SafeAreaView>
-    </TouchableWithoutFeedback>
+       />
+      <Button title="Add ToDoList" onPress={HandleSetTodos}/>
 
-    
-  );
-  
+      <ToDoLists todos = {todos} HandleRemoveTodo = {HandleRemoveTodo}/>
 
+
+      </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-   
-   
-   
+  input: {
+     padding:10,
+     height:40,
+     marginBottom:20,
+     marginTop:20,
+     borderWidth:1,
+
   },
 
-  content:{
-    padding:40,
-  },
-  list:{
-    marginTop:20,
-  }
+ 
 
 });
-

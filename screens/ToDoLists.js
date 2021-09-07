@@ -1,41 +1,29 @@
 import React,{useState,useRef,useEffect} from 'react'
-import { Button, SafeAreaView, StyleSheet, TextInput } from 'react-native'
+import { Button, SafeAreaView, StyleSheet, TextInput,View,Alert,Text } from 'react-native'
 import uuidv4 from 'uuid/v4'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import globalStyles from './styles/globalStyles'
 
-const LOCAL_STORAGE_KEY = 'todoApp.todos'
 
 export default function ToDoLists({navigation}) {
 
   const [todos,setTodos] = useState([])
+  const [text,setText] = useState('')
 
-  const todoRef = useRef()
-
-  useEffect(() =>{
-    const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-    if (storedTodos) setTodos(storedTodos)
-    
-  },[])
-
-   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(todos))
-   },[todos])
 
   function HandleSetTodos(){
     const newTodos = [...todos]
-    const name = todoRef.current.value
-
+    const name = text
 
     if (newTodos.filter(todo => todo.name === name).length > 0 || name == null || name.length == 0){
+      Alert.alert("Invalid input","Please try again","understood")
       return 
     }
 
     setTodos(prevState => {
-      return [...prevState, {id: uuidv4(),name: name, complete: false}]
+      return [...prevState, {id: uuidv4(),name: name, complete: false,tasks_counter: 0}]
     })
 
-    todoRef.current.value = null
 
   }
 
@@ -47,30 +35,38 @@ export default function ToDoLists({navigation}) {
 
   }
 
+
   return (
-    <SafeAreaView style = {{height:750,overflow:"auto"}}>
+    <SafeAreaView style={{flex:1}}>
         <TextInput
+        ClearButtonMode="always"
         placeholder = "Insert todolist"
-        ref = {todoRef}
+        onChangeText = {(val) => setText(val)}
         style = {globalStyles.input}
-
         />
-        <Button title="Add ToDoList" onPress={HandleSetTodos}/>
 
+      <Text style = {{marginLeft:10}}>Todolists: {todos.length}</Text>
+        <Button title="Add ToDoList"  onPress={HandleSetTodos}/>
+
+      <View style= {globalStyles.content}>
         <FlatList 
         data = {todos}
         renderItem = {({item,index}) => (
           <TouchableOpacity onPress ={() => navigation.navigate('Todo',item)}>
           <SafeAreaView style={globalStyles.item}>
-          <p style={{marginLeft:10}}>{index + 1}</p>
-          <p style={{marginLeft:10}}>{item.name}</p>
-    
+          
+          <Text style={{marginLeft:10}}>{index + 1}</Text>
+          <Text style={{marginLeft:10}}>{item.name}</Text>
+        
+         
           <Button title="Delete " color="red" onPress = {() => HandleRemoveTodo(item.id)} />
           </SafeAreaView>
           </TouchableOpacity>
+      
         )}
-        
-        />
+        /> 
+      
+      </View>
 
       </SafeAreaView>
   )

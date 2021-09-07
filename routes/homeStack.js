@@ -1,12 +1,15 @@
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
-import Home from "../screens/Home";
-import ToDoList from "../screens/ToDoList";
+import ToDoLists from "../screens/ToDoLists";
+import Todo from "../screens/todo";
 
 const screens = {
     Home:{
-        screen: Home
+        screen: ToDoLists
     },
+    Todo:{
+        screen: Todo
+    }
 }
 
 const HomeStack = createStackNavigator(screens);

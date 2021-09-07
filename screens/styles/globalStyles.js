@@ -7,20 +7,25 @@ export default StyleSheet.create({
         marginBottom:20,
         marginTop:20,
         borderWidth:1,
-    
+        borderRightWidth:0,
+        borderLeftWidth:0,
+        borderTopWidth:0,
    
   },
 
   item: {
+    backgroundColor:"white",
     padding:15,
     borderRadius:5,
-    borderWidth:  1,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent:"space-between",
 
-
-
 },
+
+content:{
+  flex:1,
+  padding:20
+}
   
   });

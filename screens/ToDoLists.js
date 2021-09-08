@@ -3,41 +3,12 @@ import { Button, SafeAreaView, StyleSheet, TextInput,View,Alert,Text } from 'rea
 import uuidv4 from 'uuid/v4'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import globalStyles from './styles/globalStyles'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
-
-const STORAGE_KEY = '@save_todos'
 
 export default function ToDoLists({navigation}) {
 
   const [todos,setTodos] = useState([])
   const [text,setText] = useState('')
-
-  const saveTodos = async () => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, todos)
-      alert('Data successfully saved')
-    } catch (e) {
-      alert('Failed to save the data to the storage')
-    }
-  }
-  
-  const readTodos = async () => {
-    try {
-      const storedTodos = await AsyncStorage.getItem(STORAGE_KEY)
-  
-      if (storedTodos) {
-        setTodos(storedTodos)
-      }
-    } catch (e) {
-      alert('Failed to fetch the data from storage')
-    }
-  }
-
-  useEffect(() => {
-    readTodos()
- 
-  }, [todos])
 
   function HandleSetTodos(){
     const newTodos = [...todos]
@@ -53,8 +24,7 @@ export default function ToDoLists({navigation}) {
       return [...prevState, {id: uuidv4(),name: name, complete: false,tasks_counter: 0}]
     })
    
-    //saveTodos(todos)
-
+   
   }
 
   function HandleRemoveTodo(id){

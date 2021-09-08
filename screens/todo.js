@@ -3,20 +3,44 @@ import { Button, SafeAreaView, StyleSheet, TextInput,View,Text} from 'react-nati
 import globalStyles from './styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
-
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
+const STORAGE_KEY = '@save_tasks'
 
 export default function Todo({navigation}) {
 
     const [tasks,setTasks] = useState([])
     const [text,setText] = useState('')
 
-
+    const saveTasks = async () => {
+        try {
+          await AsyncStorage.setItem(STORAGE_KEY,JSON.stringify(tasks))
+          alert('Data successfully saved')
+        } catch (e) {
+          alert('Failed to save the data to the storage')
+        }
+      }
+      
+      const readTasks = async () => {
+        try {
+          const storedTasks = await AsyncStorage.getItem(STORAGE_KEY)
+      
+          if (storedTasks) {
+            setTasks(storedTasks)
+          }
+        } catch (e) {
+          alert('Failed to fetch the data from storage')
+        }
+      }
+    
+      useEffect(() => {
+        readTasks()
+      }, [tasks])
+    
     function HandleSetTasks(){
         const newTasks = [...tasks]
         const name = text
 
+    
         if ((newTasks.filter(task => task.name === name && task.todolist ==  navigation.getParam('id')).length > 0)|| name == null || name.length == 0){
             return 
         }
@@ -24,6 +48,8 @@ export default function Todo({navigation}) {
         setTasks(prevState => {
             return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name, complete:false}]
         })
+
+      // saveTasks(tasks)
     }
 
     function HandleRemoveTask(id){

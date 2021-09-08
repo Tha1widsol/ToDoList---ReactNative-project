@@ -15,12 +15,20 @@ export default StyleSheet.create({
 
   item: {
     backgroundColor:"white",
-    padding:15,
     borderRadius:5,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent:"space-between",
+    alignItems:"center"
+  
 
+},
+
+delete:{
+  color:"red",
+  height:50,
+  bottom:-15,
+  right:5
 },
 
 content:{

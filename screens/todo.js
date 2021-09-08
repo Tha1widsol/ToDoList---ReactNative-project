@@ -1,64 +1,67 @@
 import React,{useState,useRef,useEffect}  from 'react'
-import { Button, SafeAreaView, StyleSheet, TextInput,View,Text} from 'react-native'
+import { SafeAreaView, StyleSheet, TextInput,View,Text,Button} from 'react-native'
 import globalStyles from './styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const STORAGE_KEY = '@save_tasks:key'
+const STORAGE_KEY = 'save_tasks'
 
 export default function Todo({navigation}) {
     const [tasks,setTasks] = useState([])
     const [text,setText] = useState('')
 
   useEffect(() => {
-      readTasks()
-    
+    async function fetch(){
+    try {
+      const storedTasks = await AsyncStorage.getItem(STORAGE_KEY)
+      const newTasks = JSON.parse(storedTasks)
+
+      if (newTasks) {
+        setTasks(newTasks)
+      
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+    fetch()
+
     }, [])
-  
-    const saveTasks = async () => {
+
+    useEffect(() => {
+      async function fetch(){
+
         try {
           await AsyncStorage.setItem(STORAGE_KEY,JSON.stringify(tasks))
-          alert('Data successfully saved')
-
+  
         } catch (e) {
           alert('Failed to save the data to the storage')
         }
-      }
       
-  
-    
-      const readTasks = async () => {
-        try {
-          const storedTasks = await AsyncStorage.getItem(STORAGE_KEY)
-          const newTasks = JSON.parse(storedTasks)
-
-          if (newTasks) {
-            setTasks(newTasks)
-          
-          }
-        } catch (e) {
-          alert('Failed to fetch the data from storage')
-        }
       }
-    
+
+      fetch()
+  
+      }, [tasks])
+  
+        
     
     function HandleSetTasks(){
         const newTasks = [...tasks]
         const name = text
-
     
         if ((newTasks.filter(task => task.name === name && task.todolist ==  navigation.getParam('id')).length > 0)|| name == null || name.length == 0){
+          alert("Invalid input")
             return 
         }
 
         setTasks(prevState => {
             return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name, complete:false}]
         })
-      
-        saveTasks()
-       
-
+        
+        alert('Data successfully saved')
 
     }
 
@@ -94,7 +97,10 @@ export default function Todo({navigation}) {
             <Text style={{marginLeft:10}}>{index + 1}</Text>
             <Text style={{marginLeft:10}}>{item.name}</Text>
       
-            <Button title="Delete " color="red" onPress = {() => HandleRemoveTask(item.id)} />
+            <TouchableWithoutFeedback onPress = {() => HandleRemoveTask(item.id)}>
+              <Text style = {globalStyles.delete}>DELETE</Text>
+            </TouchableWithoutFeedback>
+
             </SafeAreaView>
             </TouchableOpacity>
           )}

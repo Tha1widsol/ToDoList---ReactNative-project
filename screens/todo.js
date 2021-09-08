@@ -4,37 +4,44 @@ import globalStyles from './styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-const STORAGE_KEY = '@save_tasks'
+
+const STORAGE_KEY = '@save_tasks:key'
 
 export default function Todo({navigation}) {
-
     const [tasks,setTasks] = useState([])
     const [text,setText] = useState('')
 
+  useEffect(() => {
+      readTasks()
+    
+    }, [])
+  
     const saveTasks = async () => {
         try {
           await AsyncStorage.setItem(STORAGE_KEY,JSON.stringify(tasks))
           alert('Data successfully saved')
+
         } catch (e) {
           alert('Failed to save the data to the storage')
         }
       }
       
+  
+    
       const readTasks = async () => {
         try {
           const storedTasks = await AsyncStorage.getItem(STORAGE_KEY)
-      
-          if (storedTasks) {
-            setTasks(storedTasks)
+          const newTasks = JSON.parse(storedTasks)
+
+          if (newTasks) {
+            setTasks(newTasks)
+          
           }
         } catch (e) {
           alert('Failed to fetch the data from storage')
         }
       }
     
-      useEffect(() => {
-        readTasks()
-      }, [tasks])
     
     function HandleSetTasks(){
         const newTasks = [...tasks]
@@ -48,8 +55,11 @@ export default function Todo({navigation}) {
         setTasks(prevState => {
             return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name, complete:false}]
         })
+      
+        saveTasks()
+       
 
-      // saveTasks(tasks)
+
     }
 
     function HandleRemoveTask(id){
@@ -60,8 +70,7 @@ export default function Todo({navigation}) {
       }
 
     function getTasks(){
-        const newTasks = [...tasks]
-        return newTasks.filter(task => task.todolist === navigation.getParam('id'))
+        return tasks.filter(task => task.todolist == navigation.getParam('id'))
     }
    
     return (

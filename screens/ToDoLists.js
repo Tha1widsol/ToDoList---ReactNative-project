@@ -24,6 +24,7 @@ export default function ToDoLists({navigation}) {
       return [...prevState, {id: uuidv4(),name: name, complete: false,tasks_counter: 0}]
     })
    
+    setText('')
    
   }
 
@@ -39,7 +40,7 @@ export default function ToDoLists({navigation}) {
   return (
     <SafeAreaView style={{flex:1}}>
         <TextInput
-        ClearButtonMode="always"
+        value ={text}
         placeholder = "Insert todolist"
         onChangeText = {(val) => setText(val)}
         style = {globalStyles.input}
@@ -52,19 +53,24 @@ export default function ToDoLists({navigation}) {
         <FlatList 
         data = {todos}
         renderItem = {({item,index}) => (
-          <TouchableOpacity onPress ={() => navigation.navigate('Todo',item)}>
+          <TouchableOpacity onPress ={() => navigation.navigate('Todo',item)} >
           <SafeAreaView style={globalStyles.item}>
           
           <Text style={{marginLeft:10}}>{index + 1}</Text>
           <Text style={{marginLeft:10}}>{item.name}</Text>
         
-         
-          <Button title="Delete " color="red" onPress = {() => HandleRemoveTodo(item.id)} />
+          <TouchableOpacity onPress = {() => HandleRemoveTodo(item.id)}>
+            <Text style = {globalStyles.delete}>DELETE</Text>
+          </TouchableOpacity>
+          
           </SafeAreaView>
+        
           </TouchableOpacity>
       
         )}
+        
         /> 
+
       
       </View>
 

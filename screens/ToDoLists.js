@@ -1,14 +1,51 @@
-import React,{useState,useRef,useEffect} from 'react'
-import { Button, SafeAreaView, StyleSheet, TextInput,View,Alert,Text } from 'react-native'
+import React,{useState,useEffect} from 'react'
+import { Button, SafeAreaView, TextInput,View,Alert,Text } from 'react-native'
 import uuidv4 from 'uuid/v4'
-import { FlatList,TouchableOpacity, TouchableWithoutFeedback} from 'react-native-gesture-handler'
+import { FlatList,TouchableOpacity} from 'react-native-gesture-handler'
 import globalStyles from './styles/globalStyles'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const STORAGE_KEY = 'save_todos'
 
 export default function ToDoLists({navigation}) {
 
   const [todos,setTodos] = useState([])
   const [text,setText] = useState('')
+
+  useEffect(() => {
+    async function fetch(){
+    try {
+      const storedTodos = await AsyncStorage.getItem(STORAGE_KEY)
+      const newTodos = JSON.parse(storedTodos)
+
+      if (newTodos) {
+        setTasks(newTodos)
+      
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+    fetch()
+
+    }, [])
+
+    useEffect(() => {
+      async function fetch(){
+
+        try {
+          await AsyncStorage.setItem(STORAGE_KEY,JSON.stringify(todos))
+  
+        } catch (e) {
+          alert('Failed to save the data to the storage')
+        }
+      
+      }
+
+      fetch()
+  
+      }, [todos])
 
   function HandleSetTodos(){
     const newTodos = [...todos]
@@ -16,23 +53,27 @@ export default function ToDoLists({navigation}) {
  
 
     if (newTodos.filter(todo => todo.name === name).length > 0 || name == null || name.length == 0){
-      Alert.alert("Invalid input","Please try again","understood")
+      Alert.alert("Invalid Input","Todolists can't be repeated or input value cannot be null",[
+        {text:"Understood"}
+      ])
+
       return 
     }
 
     setTodos(prevState => {
       return [...prevState, {id: uuidv4(),name: name, complete: false,tasks_counter: 0}]
     })
-   
-    setText('')
+
+    alert("Todolist:" + " '"+text+"' " +  " added")
+    setText(null)
    
   }
 
   function HandleRemoveTodo(id){
-    const new_todos = [...todos]
-    let index = new_todos.findIndex(todo => todo.id === id)
-    new_todos.splice(index,1)
-    setTodos(new_todos)
+    const newTodos = [...todos]
+    let index = newTodos.findIndex(todo => todo.id === id)
+    newTodos.splice(index,1)
+    setTodos(newTodos)
 
   }
 

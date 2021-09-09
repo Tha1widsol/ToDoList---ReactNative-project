@@ -1,5 +1,5 @@
-import React,{useState,useRef,useEffect}  from 'react'
-import { SafeAreaView, StyleSheet, TextInput,View,Text,Button} from 'react-native'
+import React,{useState,useEffect}  from 'react'
+import { SafeAreaView,TextInput,View,Text,Button,Alert} from 'react-native'
 import globalStyles from './styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
@@ -53,15 +53,20 @@ export default function Todo({navigation}) {
         const name = text
     
         if ((newTasks.filter(task => task.name === name && task.todolist ==  navigation.getParam('id')).length > 0)|| name == null || name.length == 0){
-          alert("Invalid input")
+          Alert.alert("Invalid","Tasks can't be repeated or input value cannot be null",[
+            {text:"Understood"}
+          ])
+
             return 
         }
 
         setTasks(prevState => {
             return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name, complete:false}]
         })
+
+        setText(null)
         
-        alert('Data successfully saved')
+      
 
     }
 
@@ -72,7 +77,7 @@ export default function Todo({navigation}) {
         setTasks(newTasks)
       }
 
-    function getTasks(){
+    const getTasks = () => {
         return tasks.filter(task => task.todolist == navigation.getParam('id'))
     }
    
@@ -81,7 +86,7 @@ export default function Todo({navigation}) {
             <Text style = {{fontSize:20,textAlign:'center',padding:20}}>{navigation.getParam('name')}</Text>
 
             <TextInput
-            ClearButtonMode="always"
+            value = {text}
             placeholder = "Insert task"
             onChangeText = {(val) => setText(val)}
             style = {globalStyles.input}

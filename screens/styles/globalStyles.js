@@ -19,7 +19,11 @@ export default StyleSheet.create({
     marginBottom: 15,
     flexDirection: "row",
     justifyContent:"space-between",
-    alignItems:"center"
+    alignItems:"center",
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   
 
 },

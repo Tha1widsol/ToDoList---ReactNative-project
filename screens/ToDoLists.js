@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { Button, SafeAreaView, TextInput,View,Alert,Text } from 'react-native'
+import { SafeAreaView, TextInput,View,Alert,Text } from 'react-native'
 import uuidv4 from 'uuid/v4'
 import { FlatList,TouchableOpacity} from 'react-native-gesture-handler'
 import globalStyles from './styles/globalStyles'
@@ -61,7 +61,7 @@ export default function ToDoLists({navigation}) {
     }
 
     setTodos(prevState => {
-      return [...prevState, {id: uuidv4(),name: name, complete: false,tasks_counter: 0}]
+      return [...prevState, {id: uuidv4(),name: name}]
     })
 
     alert("Todolist:" + " '"+text+"' " +  " added")
@@ -80,31 +80,38 @@ export default function ToDoLists({navigation}) {
 
   return (
     <SafeAreaView style={{flex:1}}>
-        <TextInput
-        value ={text}
-        placeholder = "Insert todolist"
-        onChangeText = {(val) => setText(val)}
-        style = {globalStyles.input}
-        />
 
-      <Text style = {{marginLeft:10}}>Todolists: {todos.length}</Text>
-        <Button title="Add ToDoList"  onPress={HandleSetTodos}/>
+      <View style = {globalStyles.inputContainer}>
+          <TextInput
+          value ={text}
+          placeholder = "Insert todolist..."
+          onChangeText = {(val) => setText(val)}
+          style = {globalStyles.input}
+          />
+
+        <TouchableOpacity onPress = {HandleSetTodos} style = {globalStyles.add}>
+            <Text style={{fontSize:25}}>+</Text>
+          </TouchableOpacity>
+          
+      </View>
+
+      <View style = {globalStyles.divider} />
 
       <View style= {globalStyles.content}>
         <FlatList 
         data = {todos}
         renderItem = {({item,index}) => (
-          <TouchableOpacity onPress ={() => navigation.navigate('Todo',item)} >
-          <SafeAreaView style={globalStyles.item}>
-          
-          <Text style={{marginLeft:10}}>{index + 1}</Text>
-          <Text style={{marginLeft:10}}>{item.name}</Text>
-        
-          <TouchableOpacity onPress = {() => HandleRemoveTodo(item.id)}>
-            <Text style = {globalStyles.delete}>DELETE</Text>
-          </TouchableOpacity>
-          
-          </SafeAreaView>
+          <TouchableOpacity onPress ={() => navigation.navigate('Tasks',item)} >
+            <SafeAreaView style={globalStyles.item}>
+            
+              <Text style={{marginLeft:10}}>{index + 1}</Text>
+              <Text style={{marginLeft:10}}>{item.name}</Text>
+            
+              <TouchableOpacity onPress = {() => HandleRemoveTodo(item.id)}>
+                <Text style = {globalStyles.delete}>DELETE</Text>
+              </TouchableOpacity>
+            
+            </SafeAreaView>
         
           </TouchableOpacity>
       

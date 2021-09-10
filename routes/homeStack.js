@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import ToDoLists from "../screens/ToDoLists";
-import Todo from "../screens/todo";
+import Todo from "../screens/Todo";
 
 
 const screens = {

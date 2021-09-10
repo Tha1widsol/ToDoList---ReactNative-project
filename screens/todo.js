@@ -1,5 +1,5 @@
 import React,{useState,useEffect}  from 'react'
-import { SafeAreaView,TextInput,View,Text,Button,Alert} from 'react-native'
+import { SafeAreaView,TextInput,View,Text,Alert} from 'react-native'
 import globalStyles from './styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
@@ -61,7 +61,7 @@ export default function Todo({navigation}) {
         }
 
         setTasks(prevState => {
-            return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name, complete:false}]
+            return [...prevState, {id:uuidv4(),todolist: navigation.getParam('id'), name: name}]
         })
 
         setText(null)
@@ -82,17 +82,25 @@ export default function Todo({navigation}) {
     }
    
     return (
-        <SafeAreaView style = {{textAlign:'center',flex:1}}>
-            <Text style = {{fontSize:20,textAlign:'center',padding:20}}>{navigation.getParam('name')}</Text>
+        <SafeAreaView style = {{flex:1}}>
+            <Text style = {{fontSize:25,textAlign:'center',margin:20}}>{navigation.getParam('name')}</Text>
 
-            <TextInput
-            value = {text}
-            placeholder = "Insert task"
-            onChangeText = {(val) => setText(val)}
-            style = {globalStyles.input}
-            />
-        
-        <Button title = "Add Task" onPress = {HandleSetTasks}/>
+            <View style = {globalStyles.divider} />
+
+            <View style = {globalStyles.inputContainer}>
+                <TextInput
+                value = {text}
+                placeholder = "Insert task..."
+                onChangeText = {(val) => setText(val)}
+                style = {globalStyles.input}
+                />
+            
+               <TouchableOpacity onPress = {HandleSetTasks} style = {globalStyles.add}>
+                 <Text style={{fontSize:25}}>+</Text>
+               </TouchableOpacity>
+          
+          </View>
+
         <View style= {globalStyles.content}>
         <FlatList
         data = {getTasks()}
@@ -103,7 +111,7 @@ export default function Todo({navigation}) {
             <Text style={{marginLeft:10}}>{item.name}</Text>
       
             <TouchableWithoutFeedback onPress = {() => HandleRemoveTask(item.id)}>
-              <Text style = {globalStyles.delete}>DELETE</Text>
+              <Text style = {globalStyles.done}>DONE</Text>
             </TouchableWithoutFeedback>
 
             </SafeAreaView>

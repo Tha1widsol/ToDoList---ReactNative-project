@@ -84,9 +84,7 @@ export default function Todo({navigation}) {
     return (
         <SafeAreaView style = {{flex:1}}>
             <Text style = {{fontSize:25,textAlign:'center',margin:20}}>{navigation.getParam('name')}</Text>
-
             <View style = {globalStyles.divider} />
-
             <View style = {globalStyles.inputContainer}>
                 <TextInput
                 value = {text}
@@ -98,27 +96,26 @@ export default function Todo({navigation}) {
                <TouchableOpacity onPress = {HandleSetTasks} style = {globalStyles.add}>
                  <Text style={{fontSize:25}}>+</Text>
                </TouchableOpacity>
-          
           </View>
 
         <View style= {globalStyles.content}>
-        <FlatList
-        data = {getTasks()}
-        renderItem = {({item,index}) => (
-            <TouchableOpacity>
-            <SafeAreaView style = {globalStyles.item}>
-            <Text style={{marginLeft:10}}>{index + 1}</Text>
-            <Text style={{marginLeft:10}}>{item.name}</Text>
-      
-            <TouchableWithoutFeedback onPress = {() => HandleRemoveTask(item.id)}>
-              <Text style = {globalStyles.done}>DONE</Text>
-            </TouchableWithoutFeedback>
+          <FlatList
+          data = {getTasks()}
+          renderItem = {({item,index}) => (
+              <TouchableOpacity>
+              <SafeAreaView style = {globalStyles.item}>
+              <Text style={{marginLeft:10}}>{index + 1}</Text>
+              <Text style={{marginLeft:10}}>{item.name}</Text>
+        
+              <TouchableWithoutFeedback onPress = {() => HandleRemoveTask(item.id)}>
+                <Text style = {globalStyles.done}>DONE</Text>
+              </TouchableWithoutFeedback>
 
-            </SafeAreaView>
-            </TouchableOpacity>
-          )}
+              </SafeAreaView>
+              </TouchableOpacity>
+            )}
 
-        />
+          />
         </View>
 
         </SafeAreaView>

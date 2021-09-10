@@ -12,7 +12,7 @@ const screens = {
         }
 
     },
-    Tasks:{
+    Todo:{
         screen: Todo,
       
     }

@@ -91,7 +91,7 @@ export default function ToDoLists({navigation}) {
 
         <TouchableOpacity onPress = {HandleSetTodos} style = {globalStyles.add}>
             <Text style={{fontSize:25}}>+</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
           
       </View>
 
@@ -101,7 +101,7 @@ export default function ToDoLists({navigation}) {
         <FlatList 
         data = {todos}
         renderItem = {({item,index}) => (
-          <TouchableOpacity onPress ={() => navigation.navigate('Tasks',item)} >
+          <TouchableOpacity onPress ={() => navigation.navigate('Todo',item)} >
             <SafeAreaView style={globalStyles.item}>
             
               <Text style={{marginLeft:10}}>{index + 1}</Text>

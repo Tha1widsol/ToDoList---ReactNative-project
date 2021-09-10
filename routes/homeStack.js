@@ -3,12 +3,18 @@ import { createAppContainer } from "react-navigation";
 import ToDoLists from "../screens/ToDoLists";
 import Todo from "../screens/todo";
 
+
 const screens = {
-    Home:{
-        screen: ToDoLists
+    ToDoLists:{
+        screen: ToDoLists,
+        navigationOptions:{
+            headerTitleAlign: 'left'
+        }
+
     },
-    Todo:{
-        screen: Todo
+    Tasks:{
+        screen: Todo,
+      
     }
 }
 

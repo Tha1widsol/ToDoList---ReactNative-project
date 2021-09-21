@@ -1,6 +1,6 @@
 import React,{useState,useEffect}  from 'react'
 import { SafeAreaView,TextInput,View,Text,Alert} from 'react-native'
-import globalStyles from './styles/globalStyles'
+import globalStyles from '../styles/globalStyles'
 import { FlatList,TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import uuidv4 from 'uuid/v4'
 import AsyncStorage from '@react-native-async-storage/async-storage'

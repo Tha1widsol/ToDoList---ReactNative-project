@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { SafeAreaView, TextInput,View,Alert,Text } from 'react-native'
 import uuidv4 from 'uuid/v4'
 import { FlatList,TouchableOpacity} from 'react-native-gesture-handler'
-import globalStyles from './styles/globalStyles'
+import globalStyles from '../styles/globalStyles'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const STORAGE_KEY = 'save_todos'
